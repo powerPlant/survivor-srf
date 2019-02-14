@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: ubuntu:bionic
+
+%labels
+Maintainer tejas.sevak@plantandfood.co.nz
+Version 1.0.5
+
+%post
+  ## Download build prerequisites
+  apt-get -y update
+  apt-get -y install build-essential wget 
+
+ cd /opt
+ wget https://github.com/fritzsedlazeck/SURVIVOR/archive/v1.0.5.tar.gz
+ tar -xvf v1.0.5.tar.gz
+ cd SURVIVOR-1.0.5/Debug
+ make
+
+ ## Cleanup
+  rm -rf /opt/v1.0.5.tar.gz
+  apt-get remove build-essential wget -y
+  apt-get autoremove -y
+  apt-get -y clean all
+
+%runscript
+  exec /opt/SURVIVOR-1.0.5/Debug/SURVIVOR "$@"
+ 
